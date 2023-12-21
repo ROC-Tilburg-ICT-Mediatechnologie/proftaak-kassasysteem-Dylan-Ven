@@ -20,12 +20,12 @@ require "../vendor/autoload.php";
     <?php
 
     // QUESTION: Wat doet ?? in de code-regel hier onder?
-    // Antwoord:
+    // Antwoord: als $idTafel iets heeft, blijft het voor wat het is, als ie leeg is of NULL is, dan returnt ie als "false"
     $idTafel = $_GET['idtafel'] ?? false;
     if ($idTafel) {
         echo "<input type='hidden' name='idtafel' value='$idTafel'>";
 
-        // TODO: alle producten ophalen uit de database en als inputs laten zien (maak gebruik van ProductModel class)
+        // DONE: alle producten ophalen uit de database en als inputs laten zien (maak gebruik van ProductModel class)
         // Zoiets als dit:
         // foreach ( ... ) {
         //      echo "<div>";
@@ -33,14 +33,30 @@ require "../vendor/autoload.php";
         //      echo "<label>Aantal:<input type='number' name='product{$idproduct}'></label>";
         //      echo "</div>";
         // }
-        echo "<button>Volgende</button>";
+        $p = new ProductModel();
+        $producten = $p->getAll();
+        echo "<form method='POST' action='bestellingdoorvoeren.php'";
+        foreach($producten as $product){
+            $idproduct = $product->getColumnValue('idproduct');
+            $naam = $product->getColumnValue('naam');
+            $prijs = $product->getColumnValue('prijs');
+            echo "<div>";
+            echo "<label><input type='checkbox' name='products[]' value='{$idproduct}'>{$naam}</label>";
+            echo " " . "<label>Aantal:<input type='number' onKeyDown='return false'";
+            echo " name='products[]'></label>";
+            echo "</div>";
+        }
+        echo "<input type='submit' value='Doorgaan'></form>";
+        $_POST['idtafel'] = $_GET['idtafel'];
+
     } else {
         // QUESTION: Wat gebeurt hier?
-        // Antwoord:
+        // Antwoord: als er geen tafelID mee word gegeven laat ie een error zien.
         http_response_code(404);
         include('error_404.php');
         die();
     }
+
     ?>
 
 </form>

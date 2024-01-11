@@ -27,6 +27,8 @@ if ($idTafel = $_POST['idtafel'] ?? false) {
     }
     
 
+$bestelling->addProducts($producten);
+$bestelling->saveBestelling();
 } else {
     http_response_code(404);
     include('error_404.php');

@@ -36,4 +36,5 @@ if ($idTafel = $_POST['idtafel'] ?? false) {
     die();
 }
 
-header("Location: index.php");
+
+// header("Location: index.php");

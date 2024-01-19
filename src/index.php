@@ -6,10 +6,10 @@ namespace Acme;
 
 use Acme\model\TafelModel;
 
-require "../vendor/autoload.php";
+require_once "../vendor/autoload.php";
 ?>
 <!doctype html>
-<html>
+<html lang=en>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -20,11 +20,19 @@ require "../vendor/autoload.php";
 <body>
 <pre>
 <?php
-    // TODO: alle tafels ophalen uit de database en als hyperlinks laten zien (maak gebruik van class TafelModel)
+    // DONE: alle tafels ophalen uit de database en als hyperlinks laten zien (maak gebruik van class TafelModel)
     // Zoiets als dit:
     // foreach ( ... ) {
     //      echo "<div><a href='keuze.php?idtafel={$idtafel}'>{$omschrijving}')}</div>";
     // }
+    $t = new TafelModel();
+    $tafels = $t->get('SELECT * FROM tafel WHERE idtafel > :idtafel', ['idtafel' => 1]);
+
+foreach ($tafels as $tafel) {
+    $idtafel = $tafel->getColumnValue('idtafel');
+    $omschrijving = $tafel->getColumnValue('omschrijving');
+    echo "<div><a href='keuze.php?idtafel={$idtafel}'>{$omschrijving}</a></div>";
+}
 ?>
 </body>
 </html>
